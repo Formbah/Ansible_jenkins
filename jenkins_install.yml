@@ -1,0 +1,35 @@
+---
+- name: Installing jenkins on amazon linux instance
+  hosts: linuxhost
+  become: true
+  tasks:
+    - name: Download jenkins.repo file
+      get_url: 
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+    - name: Import jenkin keys
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+    - name: Update packages
+      yum: 
+        name: '*'
+        state: latest
+    - name: Install java
+      yum:
+        name: java-11-amazon-corretto-devel
+        state: latest
+    - name: Install jenkins
+      yum:
+        name: jenkins
+        state: latest
+        
+- name: enable and restart jenkins
+  hosts: all
+  become: true
+  tasks:
+    - name: enabling jenkins 
+      service: 
+        name: jenkins
+        enabled: yes
+        state: started
