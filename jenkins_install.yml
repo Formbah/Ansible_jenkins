@@ -25,7 +25,7 @@
         state: latest
         
 - name: enable and restart jenkins
-  hosts: all
+  hosts: linuxhost
   become: true
   tasks:
     - name: enabling jenkins 
